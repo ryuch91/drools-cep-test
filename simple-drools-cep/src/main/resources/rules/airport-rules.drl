@@ -1,19 +1,16 @@
-package org.jboss.ddoyle.rhsummit2014.bags;
+package org.jboss.ddoyle.drools.cep.demo;
 
-import org.jboss.ddoyle.drools.cep.demo.model.BagScannedEvent;
-import org.jboss.ddoyle.drools.cep.demo.model.Location;
+import org.jboss.ddoyle.drools.cep.demo.model.SensorFact;
 
-declare BagScannedEvent
-    @role( event )
-    @timestamp( timestamp.getTime() )
-    @expires( 2d )
+declare SensorFact
+	@role( event )
+	@timestamp( timestamp.getTime() )
+	@expires( 2d )
 end
 
-
-rule "BaggageLostAtSorting"
+rule "RainDetecting"
 when
-    $b1:BagScannedEvent( location == Location.CHECK_IN ) from entry-point AirportStream
-    not BagScannedEvent( bagTag.id == $b1.bagTag.id, location == Location.SORTING, this after[0s,10m] $b1 ) from entry-point AirportStream
+    $s1:SensorFact( rain > 0 ) from entry-point SensorStream
 then
-	System.out.println("Baggage lost at sorting. BagTag ID: " + $b1.getBagTag().getId());
+	System.out.println("Rain detected. Date: " +$s1.getTimestamp().getDate() + ", Time: " + $s1.getTimestamp().getTime());
 end

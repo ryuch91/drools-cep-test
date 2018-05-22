@@ -79,7 +79,7 @@ public class Main {
 	 * @return
 	 */
 	private static FactHandle insert(KieSession kieSession, String stream, Fact fact) {
-		LOGGER.info("Inserting fact with id: '" + fact.getId() + "' into stream: " + stream);
+		//LOGGER.info("Inserting fact with id: '" + fact.getId() + "' into stream: " + stream);
 		SessionClock clock = kieSession.getSessionClock();
 		if (!(clock instanceof SessionPseudoClock)) {
 			String errorMessage = "This fact inserter can only be used with KieSessions that use a SessionPseudoClock";
@@ -90,7 +90,7 @@ public class Main {
 		EntryPoint ep = kieSession.getEntryPoint(stream);
 
 		// First insert the fact
-		LOGGER.debug("Inserting fact: " + fact.toString());
+		//LOGGER.debug("Inserting fact: " + fact.toString());
 		FactHandle factHandle = ep.insert(fact);
 
 		// And then advance the clock
@@ -98,7 +98,7 @@ public class Main {
 		if (fact instanceof SensorFact){
 			long advanceTime = fact.getTimestamp().getTime() - pseudoClock.getCurrentTime();
 			if (advanceTime > 0) {
-				LOGGER.info("Advancing the PseudoClock with " + advanceTime + " milliseconds.");
+				//LOGGER.info("Advancing the PseudoClock with " + advanceTime + " milliseconds.");
 				pseudoClock.advanceTime(advanceTime, TimeUnit.MILLISECONDS);
 			} else {
 				LOGGER.info("Not advancing time. Fact timestamp is '" + fact.getTimestamp().getTime()
