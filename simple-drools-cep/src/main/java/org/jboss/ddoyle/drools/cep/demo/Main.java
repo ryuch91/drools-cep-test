@@ -4,16 +4,23 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.drools.core.ClockType;
 import org.drools.core.time.SessionPseudoClock;
 import org.jboss.ddoyle.drools.cep.demo.model.Event;
 import org.jboss.ddoyle.drools.cep.demo.model.Fact;
 import org.jboss.ddoyle.drools.cep.demo.model.SensorFact;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
+import org.kie.api.logger.KieRuntimeLogger;
+import org.kie.api.KieBase;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.api.runtime.rule.EntryPoint;
 import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.time.SessionClock;
+import org.kie.internal.builder.conf.RuleEngineOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +48,29 @@ public class Main {
 		LOGGER.info("Initialize KIE.");
 
 		KieServices kieServices = KieServices.Factory.get();
+		
+		// Select RETE algorithm rather than PHREAK
+		KieBaseConfiguration kbConf = kieServices.newKieBaseConfiguration();
+		kbConf.setOption( RuleEngineOption.RETEOO );
+		
 		// Load KieContainer from resources on class-path (i.e. kmodule.xml and rules).
 		KieContainer kieContainer = kieServices.getKieClasspathContainer();
-
+		KieBase kieBase = kieContainer.newKieBase(kbConf);
+		
 		// Initializing KieSession.
 		LOGGER.info("Creating KieSession.");
-		KieSession kieSession = kieContainer.newKieSession();
+		//KieSession kieSession = kieContainer.newKieSession();
+		//KieSessionConfiguration ksConf = kieServices.newKieSessionConfiguration();
+		//ksConf.setOption( ClockTypeOption.get(ClockType.PSEUDO_CLOCK.getId()));
+		
+		KieSessionConfiguration ksConf = kieServices.newKieSessionConfiguration();
+		ksConf.setOption( ClockTypeOption.get(ClockType.PSEUDO_CLOCK.getId()));
+		KieSession kieSession = kieBase.newKieSession(ksConf, null);
+		
+		KieRuntimeLogger logger = kieServices.getLoggers().newThreadedFileLogger(kieSession, "./log", 10);
+		
+		//LOGGER.info();
+		
 		try {
 			//Load the facts/events from our CSV file.
 			InputStream factsInputStream = Main.class.getClassLoader().getResourceAsStream(EVENTS_CSV_FILE);

@@ -33,6 +33,14 @@
 			<version>${version.org.kie}</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<!-- Drools RETEOO dependency -->
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-reteoo</artifactId>
+			<version>${version.org.kie}</version>
+		</dependency>
+		
 		<!-- Third party dependencies. -->
 		<dependency>
 			<groupId>commons-lang</groupId>
