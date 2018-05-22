@@ -1,5 +1,7 @@
 package org.jboss.ddoyle.drools.cep.demo.model;
 
+import java.util.Date;
+
 /**
  * 
  * @author <a href="mailto:duncan.doyle@redhat.com">Duncan Doyle</a>
@@ -20,6 +22,11 @@ public class AbstractFact implements Fact {
 	@Override
 	public String getId() {
 		return id;
+	}
+
+	@Override
+	public Date getTimestamp(){
+		return null;
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.jboss.ddoyle.drools.cep.demo.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Base interface for all our <code>facts</code>
@@ -10,5 +11,5 @@ import java.io.Serializable;
 public interface Fact extends Serializable {
 
 	public abstract String getId();
-	
+	public abstract Date getTimestamp();
 }
